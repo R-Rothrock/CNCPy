@@ -1,0 +1,41 @@
+Metadata-Version: 2.1
+Name: CNCPy
+Version: 1.0.2
+Summary: Python cursor for writing large amounts of CNC GCODE.
+Author-email: Roan Rothrock <roan.rothrock@hotmail.com>
+Project-URL: Homepage, https://github.com/R-Rothrock/CNCPy
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.4
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# CNCPy
+Python cursor for writing large amounts of CNC GCODE.
+Correctly used, it can write thousands of lines in small scripts.
+
+## Usage
+---
+
+### Installation
+Simple run in your terminal:
+```
+python3 -m pip install CNCPy
+```
+
+### Setup
+Run the following code to initialize the cursor.
+```python
+import CNCPy
+c = CNCPy.GcodeCursor("outputfile.gcode")
+```
+Refer to the documentation for additional help.
+
+NOTES
+-----
+Author: Roan Rothrock
+ - @R-Rothrock: Github
+ - roan.rothrock@bugcrowdninja.com: Bugcrowd
+ - roan.rothrock@hotmail.com: Email
+ 
+License: GNU General Public License
