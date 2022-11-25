@@ -64,13 +64,13 @@ class GcodeCursor:
         self._y = 0
         self._z = 1
 
-    def get_x(self) -> int:
+    def get_x(self) -> float:
         return float(self._x)
 
-    def get_y(self) -> int:
+    def get_y(self) -> float:
         return float(self._y)
 
-    def get_z(self) -> int:
+    def get_z(self) -> float:
         return float(self._z)
 
     def comment(self, comment, end="\n"):
