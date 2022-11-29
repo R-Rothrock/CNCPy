@@ -140,7 +140,7 @@ class GcodeCursor:
     def debug(self):
         '''
         Checks that extruder coordinates are within bounds.
-        Throws `PyGcode.Exceptions.GcodeCoordinateError` if they are.
+        Throws `CNCPy.Exceptions.GcodeCoordinateError` if they are.
         '''
         if self._x < 0:
             raise GcodeCoordinateError(x_subceed_side_error)
