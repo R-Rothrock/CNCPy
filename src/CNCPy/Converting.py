@@ -15,11 +15,11 @@ def in_to_mm(inch: int) -> float:
 def in_to_cm(inch: int) -> float:
     return inch * 2.54
 
-def farenheit_to_celsius(temp: int) -> int:
-    return int((temp - 32) * 5/9)
+def farenheit_to_celsius(temp: int) -> float:
+    return (temp - 32) * 5/9
 
-def celsius_to_farenheit(temp: int) -> int:
-    return int(temp * 9/5 + 32)
+def celsius_to_farenheit(temp: int) -> float:
+    return temp * 9/5 + 32
 
 if __name__ == "__main__":
     print("1mm to inch:", mm_to_in(1))
@@ -33,4 +33,3 @@ if __name__ == "__main__":
     print("72 Farenheit to Celsius:", farenheit_to_celsius(72))
     print("22 Celsius to Farenheit;", celsius_to_farenheit(22))
 
-    #print("deubg:", farenheit_to_celsius(celsius_to_farenheit(5)), "=", float(5))
