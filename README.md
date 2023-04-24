@@ -1,29 +1,20 @@
 # CNCPy
-Python cursor for writing large amounts of CNC GCODE.
-Correctly used, it can write thousands of lines in small scripts.
 
-## Usage
----
+Efficient GCODE writer for 3D printers and CNC wood carvers.
 
-### Installation
-Simple run in your terminal:
-```
+## Installation
+
+```shell
 python3 -m pip install CNCPy
 ```
 
-### Setup
+## Setup
+
 Run the following code to initialize the cursor.
+
 ```python
 import CNCPy
 c = CNCPy.GcodeCursor("outputfile.gcode")
 ```
-Refer to the documentation for additional help.
 
-NOTES
------
-Author: Roan Rothrock
- - @R-Rothrock: Github
- - roan.rothrock@bugcrowdninja.com: Bugcrowd
- - roan.rothrock@hotmail.com: Email
- 
-License: GNU General Public License
+Refer to the documentation for additional help.
