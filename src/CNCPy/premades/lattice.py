@@ -15,7 +15,6 @@ def lattice(cursor, x1: int, x2: int, y1: int, y2: int, layers: int):
     """
 
     x_difference = x2 - x1
-    y_difference = y2 - y1
 
     for i in range(layers):
         cursor.newln()

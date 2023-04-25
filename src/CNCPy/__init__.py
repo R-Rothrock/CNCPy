@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 __doc__ = '''
-CNCPy is a package designed to write `.gcode` files for 3D printers,
-specifically, my Creality Ender3.
+CNCPy is a Python framework designed to write `.gcode` files for CNC machines
+(3d printers, for example)
 Author: Roan Rothrock
 License: GNU General Public License
 '''
@@ -120,7 +120,8 @@ class GcodeCursor:
 
     def heat_extruder(self, temp: int, halt=True, end="\n"):
         '''
-        Heats extruder to `temp` degrees Celsius.
+        Heats extruder to `temp` degrees Celsius. On wood carvers, I
+        believe this gets the carver to speed.
         `halt`: whether or not to halt all other actions during heat
         default: True
         '''
@@ -134,7 +135,8 @@ class GcodeCursor:
 
     def heat_bed(self, temp: int, halt=True, end="\n"):
         '''
-        Heats bed to `temp` degrees Celsius.
+        Heats bed to `temp` degrees Celsius. On wood carvers, I really
+        don't know how this is interpreted
         `halt`: whether or not to halt all other actions during heat
         default: True
         '''
@@ -146,7 +148,7 @@ class GcodeCursor:
         else:
             self.append("M140 S", str(temp), end)
 
-    def debug(self):
+    def __debug(self):
         '''
         Checks that extruder coordinates are within bounds.
         Throws `CNCPy.Exceptions.GcodeCoordinateError` if they are.
@@ -162,24 +164,24 @@ class GcodeCursor:
         
         return 0
 
-    def move(self, *, extrusion: int=0, move_x: int=0, move_y: int=0,
-             move_z: int=0, speed: int=5, end: str="\n"):
+    def move(self, x: int=0, y: int=0, z: int=0, *, extrusion: int=0,
+             speed: int=5, end: str="\n"):
         '''
         Moves extruder relative to coordinates.
-        `move_x`: movement of x
-        `move_y`: movement of y
-        `move_z`: movement of z
+        `x`: movement of x
+        `y`: movement of y
+        `z`: movement of z
         `extrusion`: how much filament to extrude (only if more than 0)
         `speed`: speed of movement (default: 5)
         '''
         
         # update location variables
-        self._x += move_x
-        self._y += move_y
-        self._z += move_z
+        self._x += x
+        self._y += y
+        self._z += z
 
         # keep extruder location within bounds
-        self.debug()
+        self.__debug()
 
         # writing to file
         if extrusion == 0:
@@ -193,8 +195,8 @@ class GcodeCursor:
                         " E", str(float(self.extrude_amount)),
                         " F", str(speed*1000), end)
     
-    def move_to(self, *, extrusion: int=0, move_x: int=0, move_y: int=0,
-                      move_z: int=0, speed: int=5, end: str="\n"):
+    def move_to(self, x: int, y: int, z: int=get_z(), *, extrusion: int=0,
+                speed: int=5, end: str="\n"):
         '''
         Moves extruder _not_ relative to coordinates.
         `move_x`: new location of x
@@ -205,15 +207,15 @@ class GcodeCursor:
         '''
         
         # update location variables
-        if move_x != 0:
-            self._x = move_x
-        if move_y != 0:
-            self._y = move_y
-        if move_z != 0:
-            self._z = move_z
+        if x != 0:
+            self._x = x
+        if y != 0:
+            self._y = y
+        if z != 0:
+            self._z = z
 
         # keep extruder location within bounds
-        self.debug()
+        self.__debug()
 
         # writing to file
         if extrusion == 0:
@@ -245,7 +247,7 @@ class GcodeCursor:
         self._y += move_y
 
         # keep coordinates within bed
-        self.debug()
+        self.__debug()
 
         # handle extrusion and write
         self.extrude_amount += extrusion
@@ -273,7 +275,7 @@ class GcodeCursor:
         self._y += move_y
 
         #keep coordinates within bed
-        self.debug()
+        self.__debug()
 
         # handled extrusion and writes
         self.extrude_amount += extrusion

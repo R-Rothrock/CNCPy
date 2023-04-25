@@ -1,5 +1,5 @@
 # test_advanced.py
-# tests for new implementations in CNCPy 1.3.0
+# tests for new implementations in CNCPy 2.0.0
 
 from context import CNCPy
 from CNCPy import premades
