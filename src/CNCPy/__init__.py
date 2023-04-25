@@ -9,7 +9,16 @@ License: GNU General Public License
 import contextlib
 import os
 
-from CNCPy.Exceptions import *
+from CNCPy.Exceptions import (
+    bed_heating_error,
+    extruder_heating_error,
+    GcodeCoordinateError,
+    GcodeValueError,
+    x_subceed_side_error,
+    x_superceed_side_error,
+    y_subceed_side_error,
+    y_superceed_side_error
+)
 
 class GcodeCursor:
     '''
