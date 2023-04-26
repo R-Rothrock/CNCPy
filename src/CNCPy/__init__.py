@@ -65,22 +65,22 @@ class GcodeCursor:
 
         self.home()
 
-        self.extrude_amount = 0
-        self.bed_x = bed_x
-        self.bed_y = bed_y
+        self.__extrude_amount = 0
+        self.__bed_x = bed_x
+        self.__bed_y = bed_y
 
-        self._x = 0
-        self._y = 0
-        self._z = 1
+        self.__x = 0
+        self.__y = 0
+        self.__z = 1
 
     def get_x(self) -> float:
-        return float(self._x)
+        return float(self.__x)
 
     def get_y(self) -> float:
-        return float(self._y)
+        return float(self.__y)
 
     def get_z(self) -> float:
-        return float(self._z)
+        return float(self.__z)
 
     def comment(self, comment, end="\n"):
         '''
@@ -94,7 +94,7 @@ class GcodeCursor:
         '''
         data = str()
         for i in line:
-            data += i
+            data += str(i)
         self.__file.write(data)
 
     def newln(self):
@@ -110,7 +110,7 @@ class GcodeCursor:
         '''
         Centers extruder within the bounds of the bed.
         '''
-        self.move(move_x=self.bed_x/2, move_y=self.bed_y/2, speed=15)
+        self.move(move_x=self.__bed_x/2, move_y=self.__bed_y/2, speed=15)
 
     def pause(self, sec, end="\n"):
         '''
@@ -153,13 +153,13 @@ class GcodeCursor:
         Checks that extruder coordinates are within bounds.
         Throws `CNCPy.Exceptions.GcodeCoordinateError` if they are.
         '''
-        if self._x < 0:
+        if self.__x < 0:
             raise GcodeCoordinateError(x_subceed_side_error)
-        elif self._x > self.bed_x:
+        elif self.__x > self.__bed_x:
             raise GcodeCoordinateError(x_superceed_side_error)
-        if self._y < 0:
+        if self.__y < 0:
             raise GcodeCoordinateError(y_subceed_side_error)
-        elif self._y > self.bed_y:
+        elif self.__y > self.__bed_y:
             raise GcodeCoordinateError(y_superceed_side_error)
         
         return 0
@@ -176,26 +176,26 @@ class GcodeCursor:
         '''
         
         # update location variables
-        self._x += x
-        self._y += y
-        self._z += z
+        self.__x += x
+        self.__y += y
+        self.__z += z
 
         # keep extruder location within bounds
         self.__debug()
 
         # writing to file
         if extrusion == 0:
-            self.append("G0 X", str(float(self._x)), " Y",
-                        str(float(self._y)), " Z", str(float(self._z)),
-                        " F", str(speed*1000), end)
+            self.append("G0 X", float(self.__x), " Y",
+                        str(float(self.__y)), " Z", float(self.__z),
+                        " F", speed*1000, end)
         else:
-            self.extrude_amount += extrusion
-            self.append("G1 X", str(float(self._x)), " Y",
-                        str(float(self._y)), " Z", str(float(self._z)),
-                        " E", str(float(self.extrude_amount)),
-                        " F", str(speed*1000), end)
+            self.__extrude_amount += extrusion
+            self.append("G1 X", float(self.__x), " Y",
+                        float(self.__y), " Z", float(self.__z),
+                        " E", float(self.__extrude_amount),
+                        " F", speed*1000, end)
     
-    def move_to(self, x: int, y: int, z: int=get_z(), *, extrusion: int=0,
+    def move_to(self, x: int, y: int, z: int, *, extrusion: int=0,
                 speed: int=5, end: str="\n"):
         '''
         Moves extruder _not_ relative to coordinates.
@@ -205,29 +205,21 @@ class GcodeCursor:
         `extrusion`: how much filament to extrude (only if more than 0)
         `speed`: speed of movement (default: 5)
         '''
-        
-        # update location variables
-        if x != 0:
-            self._x = x
-        if y != 0:
-            self._y = y
-        if z != 0:
-            self._z = z
 
         # keep extruder location within bounds
         self.__debug()
 
         # writing to file
         if extrusion == 0:
-            self.append("G0 X", str(float(self._x)), " Y",
-                        str(float(self._y)), " Z", str(float(self._z)),
-                        " F", str(speed*1000), end)
+            self.append("G0 X", float(self.__x), " Y",
+                        float(self.__y), " Z", float(self.__z),
+                        " F", speed*1000, end)
         else:
-            self.extrude_amount += extrusion
-            self.append("G1 X", str(float(self._x)), " Y",
-                        str(float(self._y)), " Z", str(float(self._z)),
-                        " E", str(float(self.extrude_amount)),
-                        " F", str(speed*1000), end)
+            self.__extrude_amount += extrusion
+            self.append("G1 X", float(self.__x), " Y",
+                        float(self.__y), " Z", float(self.__z),
+                        " E", float(self.__extrude_amount),
+                        " F", speed*1000, end)
 
     def clockwise_arc(self, *, move_x: int, move_y: int, arc_x: int,
                       arc_y: int, extrusion: int = 0, speed: int=5, end="\n"):
@@ -239,22 +231,22 @@ class GcodeCursor:
         `speed`: speed of movement (default 5)
         Note: movement is relative to current location.
         '''
-        if arc_x < 0 or arc_x > self.bed_x or arc_y < 0 or arc_y > self.bed_y:
+        if arc_x < 0 or arc_x > self.__bed_x or arc_y < 0 or arc_y > self.__bed_y:
             raise GcodeCoordinateError("Arc center found off bed.")
         
         # update coords
-        self._x += move_x
-        self._y += move_y
+        self.__x += move_x
+        self.__y += move_y
 
         # keep coordinates within bed
         self.__debug()
 
         # handle extrusion and write
-        self.extrude_amount += extrusion
-        self.append("G2 X", str(float(self._x + move_x)), " Y",
-                    str(float(self._y + move_y)), " I", str(float(arc_x)), " J",
-                    str(float(arc_y)), " E", str(float(self.extrude_amount)),
-                    " F", str(speed*1000), end)
+        self.__extrude_amount += extrusion
+        self.append("G2 X", float(self.__x + move_x), " Y",
+                    float(self.__y + move_y), " I", float(arc_x), " J",
+                    float(arc_y), " E", float(self.extrude_amount),
+                    " F", speed*1000, end)
 
     def counter_clockwise_arc(self, *, move_x: int, move_y: int,
                               arc_x: int, arc_y: int, extrusion: int = 0,
@@ -267,22 +259,22 @@ class GcodeCursor:
         `speed`: speed of movement (default 5)
         Note: movement is relative to current location.
         '''
-        if arc_x < 0 or arc_x > self.bed_x or arc_y < 0 or arc_y > self.bed_y:
+        if arc_x < 0 or arc_x > self.__bed_x or arc_y < 0 or arc_y > self.__bed_y:
             raise GcodeCoordinateError("Arc center found off bed.")
 
         # update coords
-        self._x += move_x
-        self._y += move_y
+        self.__x += move_x
+        self.__y += move_y
 
         #keep coordinates within bed
         self.__debug()
 
         # handled extrusion and writes
         self.extrude_amount += extrusion
-        self.append("G3 X", str(float(self._x + move_x)), " Y",
-                    str(float(self._y + move_y)), " I", str(float(arc_x)), " J",
-                    str(float(arc_y)), " E", str(float(self.extrude_amount)),
-                    " F", str(speed*1000), end)
+        self.append("G3 X", float(self.__x + move_x), " Y",
+                    float(self.__y + move_y), " I", float(arc_x), " J",
+                    float(arc_y), " E", float(self.extrude_amount),
+                    " F", speed*1000, end)
 
     def close(self):
         '''
