@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 # custom additions
+test/sample*.py
 *.gcode
