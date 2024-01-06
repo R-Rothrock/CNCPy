@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "CNCPy"
-version = "1.0.2"
+version = "1.0.3"
 authors = [
     { name="Roan Rothrock", email="roan.rothrock@hotmail.com" },
 ]
