@@ -12,7 +12,11 @@ def lattice(cursor, x1: int, x2: int, y1: int, y2: int):
     `y1`: minimum Y for lattice
     `y2`: maximum Y for lattice
     `layers`: number of layers to print.
+    Reverts to previous position when complete
     """
+
+    oldx = cursor.get_x()
+    oldy = cursor.get_y()
 
     x_difference = x2 - x1
 
@@ -24,4 +28,4 @@ def lattice(cursor, x1: int, x2: int, y1: int, y2: int):
         cursor.move(0, 3, extrusion=3)
         cursor.move(-x_difference, extrusion=x_difference)
         cursor.move(0, 3, extrusion=3)
-    cursor.home()
+    cursor.move_to(oldx, oldy, cursor.get_z())
