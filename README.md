@@ -1,3 +1,12 @@
+NOTE
+---
+
+01/06/24
+
+After taking some time to develop and improve this project, I've
+decided this project is no longer worth developing and maintaining.
+1.0.2 will stay on PyPI, and this project will be archived.
+
 # CNCPy
 
 Efficient GCODE writer for 3D printers and CNC wood carvers.
